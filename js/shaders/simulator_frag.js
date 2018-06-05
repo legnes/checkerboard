@@ -16,14 +16,12 @@ var simulator_frag = "                                                          
   }                                                                                                                                    \n\
                                                                                                                                                     \n\
   vec2 randomDir(float seed) {                                                                                                                                    \n\
-    // return normalize(vec2(rand(4826.20934 * seed), rand(9737.2092 * seed)));                                                                                                                                    \n\
     return vec2(rand(4826.20934 * seed), rand(9737.2092 * seed));                                                                                                                                    \n\
   }                                                                                                                                    \n\
                                                                                                                                              \n\
   void main() {                                                                                                                                 \n\
-    // Dividing pixel diameter by resolution will give a range of 1, but clip space has a range of 2                                                                                          \n\                                                                                          \n\
-    // So divide diameter by two but also divide resolution by two i.e. multiply inverse by two cancel out                                                                                          \n\                                                                                          \n\
-    // Should probably find better words to explain this                                                                                          \n\                                                                                          \n\
+    // Dividing pixel diameter by resolution works for uv space, i.e. [0, 1], but clip space is [-1, 1]                                                                                          \n\                                                                                          \n\
+    // So to get the radius we divide diameter by two but also multiply by two to fix the space range                                                                                          \n\                                                                                          \n\
     vec2 radiusClipSpace = mix(uRadiusMinMax.x, uRadiusMinMax.y, vUV.x) * uInverseResolution;                                                                                          \n\
     vec2 upperBounds = vec2(1.0) - radiusClipSpace;                                                                                          \n\
     vec2 lowerBounds = vec2(-1.0) + radiusClipSpace;                                                                                          \n\
@@ -33,7 +31,7 @@ var simulator_frag = "                                                          
     vec2 velocityOld = positionVelocityOld.zw;      \n\
                                                                                                                   \n\
     // Ralston's 2nd order Runge-Kutta integration                                                                                         \n\                                                                                          \n\
-    // For velocity, the function is linear and can be reduced to simple euler: v_n+1 = v_n + hg                                                                                         \n\                                                                                          \n\
+    // For velocity, the function is linear and can be reduced to simple euler:                                                                                         \n\                                                                                          \n\
     //   v_n+1 = v_n + hg                                                                                         \n\                                                                                          \n\
     // For position, we get                                                                                         \n\                                                                                          \n\
     //   k_1 = f(t_n, y_n) = v_n                                                                                         \n\                                                                                          \n\
@@ -50,7 +48,6 @@ var simulator_frag = "                                                          
     //       So we use an arbitrarily weighted average of the new and old velocities.                                                                                          \n\                                                                                          \n\
     //       One weird thing is that at small gravities, the system loses energy even when using the end-of-frame velocity outright                                                                                          \n\                                                                                          \n\
     //       This possibly suggests integration error OR some other problem in this collision handling (both?) -- should dig into it more.                                                                                          \n\                                                                                          \n\
-    // TODO: Project forward in time (i.e. assume dt_next and integrate --> next pos) for collision detection?                                                                                         \n\                                                                                          \n\
     vec2 collisionDirections = step(positionNew, lowerBounds) + step(upperBounds, positionNew);                                                                                          \n\
     velocityNew = velocityNew - (collisionDirections * (1.7 * velocityNew + 0.3 * velocityOld) * uRestitutionCoefficient);                                                                                         \n\
     positionNew = clamp(positionNew, lowerBounds, upperBounds);                                                                                         \n\
@@ -65,6 +62,3 @@ var simulator_frag = "                                                          
     gl_FragColor = vec4(positionNew, velocityNew);                                                                                          \n\
   }                                                                                                                                             \n\
 ";
-
-    // vec2 position = vUV * 2.0 - 1.0;                                                                                          \n\
-    // position.y += sin(uTimeSeconds + (2.0 * vUV.x));                                                                                          \n\

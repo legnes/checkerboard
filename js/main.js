@@ -1,13 +1,15 @@
 // TODO LIST:
+//   o Forward project in collision detection step?
+//   o Performance -- mitigate hit from large gl_PointSize
+//   o Less terrible random() logic!
+//   o Raw shader materials (manually do uvs etc.)
+//   o Try reduced precision targets
 //   o Clean up
+//       > optimize shader code
+//       > neaten up newlines in shaders
 //       > separate sim, accum, & check into separate files?
 //       > move shaders to respectives too?)
 //       > naming (verb/noun)
-//   o Forward project in collision detection step?
-//   o Raw shader materials
-//   o How many particles w/out simulation?
-//   o Try reduced precision targets
-//   o Performance -- (N * size) -- accumulator frag? checkerboard math on big accumulations?
 
 (function() {
 
@@ -79,10 +81,10 @@
       zzrr: {particles:{count:2000,radiusMinMax:{x:1,y:256}},checkerboard:{width:152,frequency:33},physics:{shouldBump:false,gravity:{x:0,y:0},restitution:1},phases:{shouldPhase:true,phaseOffset:1,shouldGlom:false},lenses:{shouldLens:false,height:0.25,refractiveIndex:1.33}},
       shhh: {particles:{count:10000,radiusMinMax:{x:20,y:20}},checkerboard:{width:500,frequency:2},physics:{shouldBump:false,gravity:{x:0,y:0},restitution:1},phases:{shouldPhase:true,phaseOffset:1,shouldGlom:false},lenses:{shouldLens:false,height:0.25,refractiveIndex:1.33}},
       blub: {particles:{count:200,radiusMinMax:{x:200,y:200}},checkerboard:{width:9,frequency:2},physics:{shouldBump:false,gravity:{x:0,y:0},restitution:0.8},phases:{shouldPhase:false,phaseOffset:1,shouldGlom:false},lenses:{shouldLens:true,height:0.31,refractiveIndex:1.33}},
-      sockittome: {particles:{count:200,radiusMinMax:{x:200,y:200}},checkerboard:{width:9,frequency:2},physics:{shouldBump:false,gravity:{x:0,y:0},restitution:1},phases:{shouldPhase:false,phaseOffset:1,shouldGlom:false},lenses:{shouldLens:true,height:0.31,refractiveIndex:3.2240220575564362}},
       deet: {particles:{count:600,radiusMinMax:{x:200,y:200}},checkerboard:{width:119,frequency:19},physics:{shouldBump:false,gravity:{x:0,y:0},restitution:1},phases:{shouldPhase:false,phaseOffset:1,shouldGlom:false},lenses:{shouldLens:true,height:0.28,refractiveIndex:1.7}},
+      drrdrdr: {particles:{count:2,radiusMinMax:{x:200,y:200}},checkerboard:{width:42,frequency:2},physics:{shouldBump:false,gravity:{x:0,y:0},restitution:0.85},phases:{shouldPhase:false,phaseOffset:1,shouldGlom:false},lenses:{shouldLens:true,height:0.44,refractiveIndex:10}},
       fhhhh: {particles:{count:1038,radiusMinMax:{x:143,y:148}},checkerboard:{width:4,frequency:4},physics:{shouldBump:false,gravity:{x:0,y:0},restitution:1},phases:{shouldPhase:false,phaseOffset:1,shouldGlom:false},lenses:{shouldLens:true,height:0.29,refractiveIndex:1.33810098225056}},
-      bzzzz: {particles:{count:818,radiusMinMax:{x:200,y:200}},checkerboard:{width:97,frequency:2},physics:{shouldBump:false,gravity:{x:0,y:0},restitution:1},phases:{shouldPhase:true,phaseOffset:1,shouldGlom:false},lenses:{shouldLens:true,height:0.1,refractiveIndex:1.33810098225056}}
+      squg: {particles:{count:3000,radiusMinMax:{x:100,y:100}},checkerboard:{width:200,frequency:3},physics:{shouldBump:false,gravity:{x:0,y:0},restitution:0.6},phases:{shouldPhase:false,phaseOffset:1,shouldGlom:false},lenses:{shouldLens:true,height:0.3,refractiveIndex:2.3}},
     };
     function loadPreset(preset) {
       assignDeep(_inputs, preset);
